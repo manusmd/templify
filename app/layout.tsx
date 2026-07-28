@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Manrope, JetBrains_Mono } from "next/font/google";
+import SmoothScroll from "./components/SmoothScroll";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
       >
+        <SmoothScroll />
         {children}
       </body>
     </html>
