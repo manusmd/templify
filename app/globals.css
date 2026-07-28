@@ -53,6 +53,27 @@ html {
   scrollbar-color: oklch(0.4 0.03 82) var(--bg);
 }
 
+/* Scroll-progress hairline */
+.tm-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--acc);
+  z-index: 70;
+  pointer-events: none;
+}
+/* Cover image needs bleed room for parallax */
+.tm-cover-section {
+  overflow: hidden;
+}
+.tm-cover {
+  will-change: transform;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

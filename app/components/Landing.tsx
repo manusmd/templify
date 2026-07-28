@@ -25,14 +25,9 @@ export default function Landing() {
   useGSAP(
     () => {
       // Honour reduced-motion: leave everything in its natural, visible state.
-      if (
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        return;
-      }
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      // Hero entrance
+      // ── Hero entrance ──
       gsap
         .timeline({ defaults: { ease: "expo.out" } })
         .fromTo(".tm-hero-line", { opacity: 0 }, { opacity: 1, duration: 1 }, 0)
@@ -49,49 +44,148 @@ export default function Landing() {
           0.7
         );
 
-      // Scroll reveals
-      gsap.utils.toArray<HTMLElement>(".tm-reveal").forEach((el) => {
+      // ── Hero drifts up + fades as you scroll past it ──
+      gsap.to(".tm-hero", {
+        yPercent: -14,
+        opacity: 0.35,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".tm-hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // ── Scroll-progress hairline ──
+      gsap.to(".tm-progress", {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.3,
+        },
+      });
+
+      // ── Cover: cinematic image parallax + caption reveal ──
+      gsap.utils.toArray<HTMLElement>(".tm-cover-section").forEach((sec) => {
+        const img = sec.querySelector<HTMLElement>(".tm-cover-img");
+        if (img) {
+          gsap.set(img, { scale: 1.22 });
+          gsap.fromTo(
+            img,
+            { yPercent: -12 },
+            {
+              yPercent: 12,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sec,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+        }
         gsap.fromTo(
-          el,
-          { opacity: 0, y: 44 },
+          sec.querySelectorAll(".tm-cover-caption > *"),
+          { opacity: 0, y: 34 },
           {
             opacity: 1,
             y: 0,
             duration: 1.1,
+            stagger: 0.12,
             ease: "expo.out",
-            scrollTrigger: { trigger: el, start: "top 90%", once: true },
+            scrollTrigger: { trigger: sec, start: "top 62%", once: true },
           }
         );
       });
 
-      // Cover parallax
-      gsap.utils.toArray<HTMLElement>(".tm-cover").forEach((el) => {
+      // ── Section reveals (headings, about) — soft blur rise ──
+      gsap.utils.toArray<HTMLElement>(".tm-reveal").forEach((el) => {
         gsap.fromTo(
           el,
-          { scale: 1.14 },
+          { opacity: 0, y: 54, filter: "blur(10px)" },
           {
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 1.2,
+            ease: "expo.out",
+            scrollTrigger: { trigger: el, start: "top 86%", once: true },
+            onComplete: () => {
+              el.style.filter = "none";
             },
           }
         );
       });
 
-      // Card hover — "Zoom" (default of the source component's hoverEffect prop)
+      // ── About columns — stagger in ──
+      gsap.fromTo(
+        ".tm-about-cols > div",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.09,
+          ease: "expo.out",
+          scrollTrigger: { trigger: ".tm-about-cols", start: "top 84%", once: true },
+        }
+      );
+
+      // ── Index cards: curtain reveal + image parallax + hover ──
       gsap.utils.toArray<HTMLElement>(".tm-card").forEach((card) => {
-        const img = card.querySelector(".tm-img");
-        if (!img) return;
-        const enter = () =>
-          gsap.to(img, { scale: 1.05, duration: 0.8, ease: "power3.out" });
-        const leave = () =>
-          gsap.to(img, { scale: 1, duration: 0.8, ease: "power3.out" });
-        card.addEventListener("mouseenter", enter);
-        card.addEventListener("mouseleave", leave);
+        const frame = card.querySelector<HTMLElement>(".tm-frame");
+        const imgWrap = card.querySelector<HTMLElement>(".tm-img");
+        const img = card.querySelector<HTMLElement>("img");
+
+        gsap.set(card, { opacity: 0, y: 50 });
+        if (frame) gsap.set(frame, { clipPath: "inset(0 0 100% 0 round 4px)" });
+        if (img) gsap.set(img, { scale: 1.16 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: card, start: "top 86%", once: true },
+        });
+        tl.to(card, { opacity: 1, y: 0, duration: 1.1, ease: "expo.out" }, 0);
+        if (frame)
+          tl.to(
+            frame,
+            {
+              clipPath: "inset(0 0 0% 0 round 4px)",
+              duration: 1.25,
+              ease: "expo.out",
+            },
+            0.05
+          );
+
+        // Image drifts within the frame as the card travels through the viewport
+        if (img)
+          gsap.fromTo(
+            img,
+            { yPercent: -5 },
+            {
+              yPercent: 5,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+
+        if (imgWrap) {
+          card.addEventListener("mouseenter", () =>
+            gsap.to(imgWrap, { scale: 1.04, duration: 0.7, ease: "power3.out" })
+          );
+          card.addEventListener("mouseleave", () =>
+            gsap.to(imgWrap, { scale: 1, duration: 0.7, ease: "power3.out" })
+          );
+        }
       });
     },
     { scope: root }
@@ -99,6 +193,7 @@ export default function Landing() {
 
   return (
     <div className="tm-wrap" ref={root} id="top">
+      <div className="tm-progress" aria-hidden="true" />
       <nav className="tm-nav">
         <a href="#top" className="tm-nav-brand">
           Templify
@@ -246,7 +341,7 @@ export default function Landing() {
                 href={t.href}
                 target="_blank"
                 rel="noreferrer"
-                className="tm-card tm-reveal"
+                className="tm-card"
                 style={style}
               >
                 {inner}
@@ -255,7 +350,7 @@ export default function Landing() {
               <Link
                 key={t.slug}
                 href={`/templates/${t.slug}`}
-                className="tm-card tm-reveal"
+                className="tm-card"
                 style={style}
               >
                 {inner}
