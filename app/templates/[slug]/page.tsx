@@ -5,9 +5,13 @@ import ImageSlot from "@/app/components/ImageSlot";
 import { templates } from "@/lib/templates";
 import styles from "./detail.module.css";
 
+// Templates with their own dedicated detail page (app/templates/<slug>).
+const DEDICATED = ["mesa", "ligature"];
+
 export function generateStaticParams() {
-  // "mesa" has its own dedicated detail page (app/templates/mesa) — exclude it here.
-  return templates.filter((t) => t.slug !== "mesa").map((t) => ({ slug: t.slug }));
+  return templates
+    .filter((t) => !DEDICATED.includes(t.slug))
+    .map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({
