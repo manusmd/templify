@@ -324,7 +324,9 @@ export default function Landing() {
                         src={t.image}
                         alt={`${t.name} — ${t.tag}`}
                         className="tm-cover-img"
-                        loading="lazy"
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
                       />
                     ) : (
                       <ImageSlot label={t.placeholder} />
