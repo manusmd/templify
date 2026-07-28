@@ -172,7 +172,10 @@ a:hover {
 
 /* ---- Hero ---- */
 .tm-hero {
-  padding: 200px 40px 0;
+  min-height: 100svh;
+  padding: 118px 40px 64px;
+  display: flex;
+  flex-direction: column;
 }
 .tm-hero-line {
   display: flex;
@@ -185,7 +188,9 @@ a:hover {
   color: var(--muted-dim);
   border-bottom: 1px solid var(--line-strong);
   padding-bottom: 14px;
-  margin-bottom: 56px;
+}
+.tm-hero-title {
+  margin-top: auto;
 }
 .tm-hero-title {
   font-size: clamp(56px, 9.4vw, 152px);
@@ -213,8 +218,7 @@ a:hover {
   grid-template-columns: 1fr auto;
   gap: 48px;
   align-items: end;
-  margin-top: 56px;
-  padding-bottom: 64px;
+  margin-top: 48px;
 }
 .tm-hero-foot p {
   font-size: 17px;

@@ -209,7 +209,6 @@ export default function Landing() {
       <section className="tm-hero tm-container">
         <div className="tm-hero-line">
           <span>Collection 01 — Six websites</span>
-          <span>Est. 2026 · Berlin</span>
         </div>
 
         <h1 className="tm-hero-title">
