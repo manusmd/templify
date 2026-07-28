@@ -31,7 +31,7 @@ export const templates: Template[] = [
     span: 4,
     aspect: "16 / 10",
     available: true,
-    image: "/templates/mesa-hero.jpg",
+    image: "/templates/mesa-card.jpg",
     repo: "https://github.com/manusmd/templify-mesa",
   },
   {
@@ -43,7 +43,7 @@ export const templates: Template[] = [
     span: 4,
     aspect: "16 / 10",
     available: true,
-    image: "/templates/ligature-hero.jpg",
+    image: "/templates/ligature-card.jpg",
     repo: "https://github.com/manusmd/templify-ligature",
   },
   {
@@ -55,7 +55,7 @@ export const templates: Template[] = [
     span: 4,
     aspect: "16 / 10",
     available: true,
-    image: "/templates/aperture-hero.jpg",
+    image: "/templates/aperture-card.jpg",
     repo: "https://github.com/manusmd/templify-aperture",
   },
   // ── Concepts (coming this season) ──
