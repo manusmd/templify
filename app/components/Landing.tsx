@@ -95,10 +95,10 @@ export default function Landing() {
           {
             opacity: 1,
             y: 0,
-            duration: 1.1,
-            stagger: 0.12,
-            ease: "expo.out",
-            scrollTrigger: { trigger: sec, start: "top 62%", once: true },
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: sec, start: "top 72%", once: true },
           }
         );
       });
@@ -107,14 +107,14 @@ export default function Landing() {
       gsap.utils.toArray<HTMLElement>(".tm-reveal").forEach((el) => {
         gsap.fromTo(
           el,
-          { opacity: 0, y: 54, filter: "blur(10px)" },
+          { opacity: 0, y: 40, filter: "blur(8px)" },
           {
             opacity: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 1.2,
-            ease: "expo.out",
-            scrollTrigger: { trigger: el, start: "top 86%", once: true },
+            duration: 0.85,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 90%", once: true },
             onComplete: () => {
               el.style.filter = "none";
             },
@@ -129,10 +129,10 @@ export default function Landing() {
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          stagger: 0.09,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".tm-about-cols", start: "top 84%", once: true },
+          duration: 0.75,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ".tm-about-cols", start: "top 88%", once: true },
         }
       );
 
@@ -142,23 +142,23 @@ export default function Landing() {
         const imgWrap = card.querySelector<HTMLElement>(".tm-img");
         const img = card.querySelector<HTMLElement>("img");
 
-        gsap.set(card, { opacity: 0, y: 50 });
+        gsap.set(card, { opacity: 0, y: 34 });
         if (frame) gsap.set(frame, { clipPath: "inset(0 0 100% 0 round 4px)" });
         if (img) gsap.set(img, { scale: 1.16 });
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: card, start: "top 86%", once: true },
+          scrollTrigger: { trigger: card, start: "top 92%", once: true },
         });
-        tl.to(card, { opacity: 1, y: 0, duration: 1.1, ease: "expo.out" }, 0);
+        tl.to(card, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0);
         if (frame)
           tl.to(
             frame,
             {
               clipPath: "inset(0 0 0% 0 round 4px)",
-              duration: 1.25,
-              ease: "expo.out",
+              duration: 0.85,
+              ease: "power3.out",
             },
-            0.05
+            0
           );
 
         // Image drifts within the frame as the card travels through the viewport
@@ -187,6 +187,16 @@ export default function Landing() {
           );
         }
       });
+
+      // Recompute trigger positions once fonts/images settle, so cards can't
+      // stay stranded (e.g. on a reload while already scrolled into the index).
+      if (document.readyState === "complete") {
+        ScrollTrigger.refresh();
+      } else {
+        window.addEventListener("load", () => ScrollTrigger.refresh(), {
+          once: true,
+        });
+      }
     },
     { scope: root }
   );
