@@ -308,7 +308,7 @@ export default function Landing() {
             className="eyebrow"
             style={{ color: "var(--muted-dimmer)" }}
           >
-            Eight templates · three live
+            Eight templates · four live
           </span>
         </div>
 

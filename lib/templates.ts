@@ -58,18 +58,21 @@ export const templates: Template[] = [
     image: "/templates/aperture-card.jpg",
     repo: "https://github.com/manusmd/templify-aperture",
   },
+  {
+    num: "NEW",
+    slug: "marfa",
+    name: "Marfa",
+    tag: "Architecture · Live",
+    placeholder: "Marfa — architecture practice site",
+    span: 4,
+    aspect: "16 / 10",
+    available: true,
+    image: "/templates/marfa-card.jpg",
+    repo: "https://github.com/manusmd/templify-marfa",
+  },
   // ── Concepts (coming this season) ──
   {
     num: "01",
-    slug: "marfa",
-    name: "Marfa",
-    tag: "Architecture",
-    placeholder: "Marfa — architecture practice site",
-    span: 4,
-    aspect: "4 / 3",
-  },
-  {
-    num: "02",
     slug: "verso",
     name: "Verso",
     tag: "Editorial",
@@ -79,7 +82,7 @@ export const templates: Template[] = [
     style: { marginTop: 40 },
   },
   {
-    num: "03",
+    num: "02",
     slug: "halcyon",
     name: "Halcyon",
     tag: "Boutique hotel",
@@ -88,7 +91,7 @@ export const templates: Template[] = [
     aspect: "4 / 3",
   },
   {
-    num: "04",
+    num: "03",
     slug: "atlas-co",
     name: "Atlas & Co",
     tag: "Design studio",
@@ -97,7 +100,7 @@ export const templates: Template[] = [
     aspect: "4 / 3",
   },
   {
-    num: "05",
+    num: "04",
     slug: "ferro",
     name: "Ferro",
     tag: "Furniture brand",
