@@ -146,7 +146,12 @@ export default function Landing() {
       {/* Cover */}
       <section className="tm-cover-section">
         <div className="tm-cover">
-          <ImageSlot label="Drop the cover screenshot — Aperture, full-bleed hero" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/templates/aperture-hero.jpg"
+            alt="Aperture — photography studio template"
+            className="tm-cover-img"
+          />
         </div>
         <div className="tm-cover-scrim" />
         <div className="tm-cover-caption">
@@ -199,7 +204,7 @@ export default function Landing() {
             className="eyebrow"
             style={{ color: "var(--muted-dimmer)" }}
           >
-            Eight templates · two live
+            Eight templates · three live
           </span>
         </div>
 

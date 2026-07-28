@@ -21,13 +21,14 @@ export type Template = {
 };
 
 export const templates: Template[] = [
+  // ── Live templates ──
   {
     num: "NEW",
     slug: "mesa",
     name: "Mesa",
     tag: "Restaurant · Live",
     placeholder: "Mesa — wood-fired restaurant site",
-    span: 6,
+    span: 4,
     aspect: "16 / 10",
     available: true,
     image: "/templates/mesa-hero.jpg",
@@ -39,53 +40,55 @@ export const templates: Template[] = [
     name: "Ligature",
     tag: "Brand studio · Live",
     placeholder: "Ligature — brand studio site",
-    span: 6,
+    span: 4,
     aspect: "16 / 10",
     available: true,
     image: "/templates/ligature-hero.jpg",
     repo: "https://github.com/manusmd/templify-ligature",
   },
   {
-    num: "01",
+    num: "NEW",
     slug: "aperture",
     name: "Aperture",
-    tag: "Photography studio",
+    tag: "Photography · Live",
     placeholder: "Aperture — photography studio site",
-    span: 7,
-    aspect: "4 / 3",
+    span: 4,
+    aspect: "16 / 10",
+    available: true,
+    image: "/templates/aperture-hero.jpg",
+    repo: "https://github.com/manusmd/templify-aperture",
   },
+  // ── Concepts (coming this season) ──
   {
-    num: "02",
+    num: "01",
     slug: "marfa",
     name: "Marfa",
     tag: "Architecture",
     placeholder: "Marfa — architecture practice site",
-    span: 5,
-    aspect: "1 / 1",
-    style: { alignSelf: "end" },
+    span: 4,
+    aspect: "4 / 3",
   },
   {
-    num: "03",
+    num: "02",
     slug: "verso",
     name: "Verso",
     tag: "Editorial",
     placeholder: "Verso — editorial magazine site",
     span: 4,
     aspect: "3 / 4",
-    style: { marginTop: 52 },
+    style: { marginTop: 40 },
   },
   {
-    num: "04",
+    num: "03",
     slug: "halcyon",
     name: "Halcyon",
     tag: "Boutique hotel",
     placeholder: "Halcyon — boutique hotel site",
-    span: 8,
-    aspect: "16 / 10",
-    style: { marginTop: 52 },
+    span: 4,
+    aspect: "4 / 3",
   },
   {
-    num: "05",
+    num: "04",
     slug: "atlas-co",
     name: "Atlas & Co",
     tag: "Design studio",
@@ -94,7 +97,7 @@ export const templates: Template[] = [
     aspect: "4 / 3",
   },
   {
-    num: "06",
+    num: "05",
     slug: "ferro",
     name: "Ferro",
     tag: "Furniture brand",
@@ -104,6 +107,6 @@ export const templates: Template[] = [
   },
 ];
 
-/** The hero's featured release stays Aperture (a concept), independent of array order. */
+/** The hero's featured release is Aperture — now a live template. */
 export const featured =
   templates.find((t) => t.slug === "aperture") ?? templates[0];
