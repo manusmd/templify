@@ -394,6 +394,35 @@ export default function Datenschutz() {
         privacy policy.
       </p>
 
+      <h2>5. Web analytics</h2>
+
+      <h3>Countly (self-hosted)</h3>
+      <p>
+        This website uses Countly, an open-source web analytics service, to
+        analyze how visitors use our website. Countly enables us to collect and
+        evaluate data about the use of our website — for example which pages are
+        viewed, how long a session lasts, and which browser, operating system
+        and approximate region visitors use.
+      </p>
+      <p>
+        For this purpose, Countly processes information including your IP
+        address, device and browser information, the referrer URL, and the pages
+        and interactions on our website.
+      </p>
+      <p>
+        We host Countly exclusively on our own server infrastructure. All
+        analytics data remains with us and is not shared with third parties.
+      </p>
+      <p>
+        The use of Countly takes place exclusively on the basis of your consent
+        (Art. 6(1)(a) GDPR and § 25(1) TDDDG). No analytics are loaded and no
+        analytics cookies or comparable technologies are stored on your device
+        until you have given your consent. You can revoke your consent at any
+        time with effect for the future via the “Cookie settings” link in the
+        footer of this website; the lawfulness of the processing carried out
+        until revocation remains unaffected.
+      </p>
+
       <p>
         Source:{" "}
         <a href="https://www.e-recht24.de" target="_blank" rel="noreferrer">
