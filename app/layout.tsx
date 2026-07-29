@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://templify.example"),
+  metadataBase: new URL("https://templify.projects.manu-web.de"),
   title: "Templify — Websites that look like they were commissioned",
   description:
     "A curated index of website templates — six a season, each built like client work: real typography, real motion. No dashboard filler.",
