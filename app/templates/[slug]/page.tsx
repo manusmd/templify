@@ -6,7 +6,7 @@ import { templates } from "@/lib/templates";
 import styles from "./detail.module.css";
 
 // Templates with their own dedicated detail page (app/templates/<slug>).
-const DEDICATED = ["mesa", "ligature", "aperture", "marfa", "verso", "halcyon", "atlas-co"];
+const DEDICATED = ["mesa", "ligature", "aperture", "marfa", "verso", "halcyon", "atlas-co", "ferro"];
 
 export function generateStaticParams() {
   return templates

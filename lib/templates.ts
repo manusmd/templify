@@ -106,15 +106,17 @@ export const templates: Template[] = [
     image: "/templates/atlas-co-card.jpg",
     repo: "https://github.com/manusmd/templify-atlas",
   },
-  // ── Concepts (coming this season) ──
   {
-    num: "01",
+    num: "NEW",
     slug: "ferro",
     name: "Ferro",
-    tag: "Furniture brand",
+    tag: "Furniture brand · Live",
     placeholder: "Ferro — furniture brand site",
-    span: 6,
-    aspect: "4 / 3",
+    span: 4,
+    aspect: "16 / 10",
+    available: true,
+    image: "/templates/ferro-card.jpg",
+    repo: "https://github.com/manusmd/templify-ferro",
   },
 ];
 
