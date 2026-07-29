@@ -68,6 +68,10 @@
 .prose p {
   margin: 0 0 16px;
 }
+.prose strong {
+  color: var(--fg);
+  font-weight: 600;
+}
 .prose a {
   color: var(--acc);
 }

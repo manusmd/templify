@@ -6,7 +6,7 @@ import { openConsent } from "@/lib/consent";
 export default function CookieSettingsButton() {
   return (
     <button type="button" onClick={() => openConsent()}>
-      Cookie-Einstellungen
+      Cookie settings
     </button>
   );
 }

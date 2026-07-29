@@ -24,14 +24,14 @@ export default function ConsentBanner() {
   }
 
   return (
-    <div className="tm-consent" role="dialog" aria-label="Analyse-Einwilligung">
+    <div className="tm-consent" role="dialog" aria-label="Analytics consent">
       <div className="tm-consent-inner">
         <p className="tm-consent-text">
-          Wir nutzen selbst gehostete Analyse (Countly), um zu verstehen, wie
-          Templify genutzt wird — nur mit deiner Einwilligung. Ohne Zustimmung
-          werden keine Analyse-Cookies gesetzt. Mehr dazu in der{" "}
+          We use self-hosted analytics (Countly) to understand how Templify is
+          used — only with your consent. No analytics cookies are set unless you
+          agree. Learn more in our{" "}
           <Link href="/datenschutz" className="tm-consent-link">
-            Datenschutzerklärung
+            Privacy Policy
           </Link>
           .
         </p>
@@ -41,14 +41,14 @@ export default function ConsentBanner() {
             className="tm-consent-btn tm-consent-decline"
             onClick={() => choose("denied")}
           >
-            Ablehnen
+            Decline
           </button>
           <button
             type="button"
             className="tm-consent-btn tm-consent-accept"
             onClick={() => choose("granted")}
           >
-            Akzeptieren
+            Accept
           </button>
         </div>
       </div>

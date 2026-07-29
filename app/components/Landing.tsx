@@ -420,8 +420,8 @@ export default function Landing() {
           <a href="https://github.com/manusmd" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <Link href="/impressum">Impressum</Link>
-          <Link href="/datenschutz">Datenschutz</Link>
+          <Link href="/impressum">Legal Notice</Link>
+          <Link href="/datenschutz">Privacy</Link>
           <CookieSettingsButton />
         </div>
         <span>© 2026</span>

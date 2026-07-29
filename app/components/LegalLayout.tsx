@@ -26,7 +26,7 @@ export default function LegalLayout({
 
       <main className={styles.main}>
         <Link href="/" className={styles.back}>
-          ← Zurück zur Startseite
+          ← Back to home
         </Link>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.prose}>{children}</div>
@@ -35,8 +35,8 @@ export default function LegalLayout({
       <footer className="tm-footer">
         <span className="tm-footer-brand">Templify</span>
         <div className="tm-footer-links">
-          <Link href="/impressum">Impressum</Link>
-          <Link href="/datenschutz">Datenschutz</Link>
+          <Link href="/impressum">Legal Notice</Link>
+          <Link href="/datenschutz">Privacy</Link>
           <CookieSettingsButton />
         </div>
         <span>© 2026</span>
