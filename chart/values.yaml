@@ -2,7 +2,7 @@
 # else here is set once. See projects-infrastructure for the platform.
 image:
   repository: ghcr.io/manusmd/templify
-  tag: 1027b7b259c4c5cd055fed2709ed1fc06a5019b2
+  tag: e2992dec2f8c5089c11df73bb952817de7d1cb53
   pullPolicy: IfNotPresent
 replicas: 1
 port: 3000
