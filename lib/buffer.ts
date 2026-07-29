@@ -105,3 +105,42 @@ export async function createPost(
   if (!data.createPost?.post) throw new Error("Buffer did not return a created post.");
   return data.createPost.post;
 }
+
+export type PostMetric = { type: string; name: string; value: number; unit: string };
+
+export async function getPost(
+  apiKey: string,
+  id: string,
+): Promise<{
+  id: string;
+  status: string;
+  metrics: PostMetric[];
+  metricsUpdatedAt: string | null;
+}> {
+  // id (PostId scalar) inlined — its variable type isn't documented.
+  const data = await gql<{
+    post: {
+      id: string;
+      status: string;
+      metrics?: PostMetric[] | null;
+      metricsUpdatedAt?: string | null;
+    } | null;
+  }>(
+    apiKey,
+    `query {
+      post(input: { id: ${JSON.stringify(id)} }) {
+        id
+        status
+        metrics { type name value unit }
+        metricsUpdatedAt
+      }
+    }`,
+  );
+  if (!data.post) throw new Error("Post not found on Buffer.");
+  return {
+    id: data.post.id,
+    status: data.post.status,
+    metrics: data.post.metrics ?? [],
+    metricsUpdatedAt: data.post.metricsUpdatedAt ?? null,
+  };
+}

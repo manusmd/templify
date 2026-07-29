@@ -20,6 +20,12 @@ const modules = [
     status: "Planned",
   },
   {
+    title: "Security",
+    body: "Two-factor authentication for the admin.",
+    href: "/admin/security",
+    status: "Open",
+  },
+  {
     title: "Analytics",
     body: "Countly insights alongside social engagement.",
     status: "Planned",

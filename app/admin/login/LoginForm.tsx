@@ -12,11 +12,16 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Two-factor challenge state
+  const [needsTwoFactor, setNeedsTwoFactor] = useState(false);
+  const [code, setCode] = useState("");
+  const [useBackup, setUseBackup] = useState(false);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email: email.trim(),
       password,
     });
@@ -25,8 +30,74 @@ export default function LoginForm() {
       setError(error.message ?? "Invalid email or password.");
       return;
     }
+    if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) {
+      setNeedsTwoFactor(true);
+      return;
+    }
     router.push("/admin/dashboard");
     router.refresh();
+  }
+
+  async function onVerify(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const value = code.trim();
+    const { error } = useBackup
+      ? await authClient.twoFactor.verifyBackupCode({ code: value })
+      : await authClient.twoFactor.verifyTotp({ code: value });
+    setLoading(false);
+    if (error) {
+      setError(error.message ?? "That code didn't match.");
+      return;
+    }
+    router.push("/admin/dashboard");
+    router.refresh();
+  }
+
+  if (needsTwoFactor) {
+    return (
+      <form onSubmit={onVerify}>
+        <label className={styles.field}>
+          <span className={styles.label}>
+            {useBackup ? "Backup code" : "Authenticator code"}
+          </span>
+          <input
+            className={styles.input}
+            inputMode={useBackup ? "text" : "numeric"}
+            autoComplete="one-time-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+            autoFocus
+          />
+        </label>
+        <button className={styles.btn} type="submit" disabled={loading}>
+          {loading ? "Verifying…" : "Verify"}
+        </button>
+        <p className={styles.foot}>
+          <button
+            type="button"
+            onClick={() => {
+              setUseBackup((v) => !v);
+              setCode("");
+              setError(null);
+            }}
+            style={{
+              background: "none",
+              border: 0,
+              color: "var(--acc)",
+              cursor: "pointer",
+              padding: 0,
+              font: "inherit",
+            }}
+          >
+            {useBackup ? "Use an authenticator code" : "Use a backup code"}
+          </button>
+        </p>
+        {error && <p className={styles.error}>{error}</p>}
+      </form>
+    );
   }
 
   return (

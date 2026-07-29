@@ -10,9 +10,16 @@ import {
   clearSettings,
   getBufferConfig,
 } from "@/lib/settings";
-import { getOrganizations, getChannels, createPost } from "@/lib/buffer";
+import { getOrganizations, getChannels, createPost, getPost } from "@/lib/buffer";
 
 export type ActionResult = { ok: boolean; error?: string };
+
+function normalizeStatus(s: string): string {
+  const v = (s ?? "").toLowerCase();
+  if (/sent|publish|complete|success/.test(v)) return "sent";
+  if (/error|fail/.test(v)) return "failed";
+  return "scheduled";
+}
 
 async function requireSession() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -69,6 +76,37 @@ export async function disconnectBuffer(): Promise<void> {
     SETTING.bufferChannelId,
     SETTING.bufferChannelName,
   ]);
+  revalidatePath("/admin/social");
+}
+
+export async function refreshMetrics(): Promise<void> {
+  await requireSession();
+  const cfg = await getBufferConfig();
+  if (!cfg.connected || !cfg.apiKey) return;
+  const posts = await prisma.socialPost.findMany({
+    where: { bufferPostId: { not: null } },
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+  await Promise.allSettled(
+    posts.map(async (p) => {
+      try {
+        const bp = await getPost(cfg.apiKey!, p.bufferPostId!);
+        await prisma.socialPost.update({
+          where: { id: p.id },
+          data: {
+            status: normalizeStatus(bp.status),
+            ...(bp.metrics.length ? { metrics: bp.metrics } : {}),
+            ...(bp.metricsUpdatedAt
+              ? { metricsUpdatedAt: new Date(bp.metricsUpdatedAt) }
+              : {}),
+          },
+        });
+      } catch {
+        // Skip individual post failures — a partial refresh is fine.
+      }
+    }),
+  );
   revalidatePath("/admin/social");
 }
 

@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
+import { twoFactor } from "better-auth/plugins";
 import { prisma } from "./prisma";
 
 /**
@@ -43,6 +44,7 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // refresh the session once a day
   },
+  plugins: [twoFactor({ issuer: "Templify" })],
 });
 
 /** True when no admin has been created yet (first-run setup should show). */
