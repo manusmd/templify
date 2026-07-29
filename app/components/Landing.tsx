@@ -416,7 +416,6 @@ export default function Landing() {
       <footer className="tm-footer">
         <span className="tm-footer-brand">Templify</span>
         <div className="tm-footer-links">
-          <a href="#">Instagram</a>
           <a href="https://github.com/manusmd" target="_blank" rel="noreferrer">
             GitHub
           </a>
