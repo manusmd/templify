@@ -2,17 +2,12 @@
 # else here is set once. See projects-infrastructure for the platform.
 image:
   repository: ghcr.io/manusmd/templify
-  tag: latest
+  tag: 6208c3ab8ed74a7d5da2981b33e4eed20e4a17b5
   pullPolicy: IfNotPresent
-
 replicas: 1
-
 port: 3000
-
 host: templify.projects.manu-web.de
-
 certResolver: letsencrypt
-
 resources:
   requests:
     cpu: 50m
