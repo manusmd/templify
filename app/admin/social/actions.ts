@@ -116,7 +116,10 @@ export async function createSocialPost(
 ): Promise<ActionResult> {
   await requireSession();
   const caption = String(formData.get("caption") ?? "").trim();
-  const imageUrl = String(formData.get("imageUrl") ?? "").trim();
+  const imageUrls = formData
+    .getAll("imageUrls")
+    .map((v) => String(v).trim())
+    .filter(Boolean);
   const igType = String(formData.get("type") ?? "post") as
     | "post"
     | "reel"
@@ -128,8 +131,10 @@ export async function createSocialPost(
   const templateSlug = String(formData.get("templateSlug") ?? "") || null;
 
   if (!caption) return { ok: false, error: "Write a caption." };
-  if (!imageUrl)
-    return { ok: false, error: "An image URL is required for Instagram." };
+  if (imageUrls.length === 0)
+    return { ok: false, error: "Add at least one image for Instagram." };
+  if (imageUrls.length > 10)
+    return { ok: false, error: "Instagram carousels allow up to 10 images." };
 
   const cfg = await getBufferConfig();
   if (!cfg.connected || !cfg.apiKey || !cfg.channelId)
@@ -149,7 +154,7 @@ export async function createSocialPost(
     const post = await createPost(cfg.apiKey, {
       channelId: cfg.channelId,
       text: caption,
-      imageUrl,
+      imageUrls,
       igType,
       mode,
       dueAt: dueAtIso,
@@ -157,7 +162,8 @@ export async function createSocialPost(
     await prisma.socialPost.create({
       data: {
         caption,
-        imageUrl,
+        imageUrl: imageUrls[0],
+        imageUrls,
         type: igType,
         mode,
         status: "scheduled",
@@ -175,7 +181,8 @@ export async function createSocialPost(
     await prisma.socialPost.create({
       data: {
         caption,
-        imageUrl,
+        imageUrl: imageUrls[0],
+        imageUrls,
         type: igType,
         mode,
         status: "failed",

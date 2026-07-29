@@ -84,7 +84,8 @@ model Setting {
 model SocialPost {
   id           String    @id @default(cuid())
   caption      String
-  imageUrl     String
+  imageUrl     String // cover (first slide) — kept for the list thumbnail
+  imageUrls    Json? // full carousel (array of slide URLs)
   type         String    @default("post") // post | reel | story
   mode         String    @default("customScheduled") // addToQueue | customScheduled
   status       String    @default("scheduled") // draft | scheduled | sent | failed

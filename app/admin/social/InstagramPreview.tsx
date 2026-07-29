@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import s from "./social.module.css";
 
 function renderCaption(text: string) {
@@ -15,17 +18,25 @@ function renderCaption(text: string) {
 export default function InstagramPreview({
   username,
   caption,
-  imageUrl,
+  imageUrls,
   type,
 }: {
   username: string;
   caption: string;
-  imageUrl: string;
-  type: "post" | "reel" | "story";
+  imageUrls: string[];
+  type: "post" | "reel";
 }) {
   const handle = (username || "templify").toLowerCase().replace(/\s+/g, "");
   const initial = handle.charAt(0).toUpperCase() || "T";
   const isReel = type === "reel";
+  const images = imageUrls.filter(Boolean);
+  const many = images.length > 1;
+
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    if (idx > images.length - 1) setIdx(0);
+  }, [images.length, idx]);
+  const current = images[idx];
 
   return (
     <div className={s.igCard}>
@@ -38,11 +49,17 @@ export default function InstagramPreview({
       </div>
 
       <div className={`${s.igMedia} ${isReel ? s.igMediaReel : ""}`}>
-        {imageUrl ? (
+        {current ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt="" />
+          <img src={current} alt="" />
         ) : (
           <div className={s.igMediaEmpty}>Image preview</div>
+        )}
+
+        {many && (
+          <span className={s.igCount}>
+            {idx + 1}/{images.length}
+          </span>
         )}
         {isReel && (
           <span className={s.igReelBadge}>
@@ -52,7 +69,38 @@ export default function InstagramPreview({
             Reel
           </span>
         )}
+        {many && idx > 0 && (
+          <button
+            type="button"
+            className={`${s.igArrow} ${s.igArrowL}`}
+            onClick={() => setIdx((i) => i - 1)}
+            aria-label="Previous"
+          >
+            ‹
+          </button>
+        )}
+        {many && idx < images.length - 1 && (
+          <button
+            type="button"
+            className={`${s.igArrow} ${s.igArrowR}`}
+            onClick={() => setIdx((i) => i + 1)}
+            aria-label="Next"
+          >
+            ›
+          </button>
+        )}
       </div>
+
+      {many && (
+        <div className={s.igDotsRow}>
+          {images.map((_, i) => (
+            <span
+              key={i}
+              className={`${s.igDot} ${i === idx ? s.igDotOn : ""}`}
+            />
+          ))}
+        </div>
+      )}
 
       <div className={s.igActions}>
         <div className={s.igActionsLeft}>
@@ -75,7 +123,9 @@ export default function InstagramPreview({
       <div className={s.igLikes}>128 likes</div>
       <div className={s.igCaption}>
         <b>{handle}</b>{" "}
-        {caption ? renderCaption(caption) : (
+        {caption ? (
+          renderCaption(caption)
+        ) : (
           <span style={{ color: "#8e8e8e" }}>Your caption will appear here…</span>
         )}
       </div>

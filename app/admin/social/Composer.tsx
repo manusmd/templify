@@ -11,7 +11,7 @@ type TemplateOption = {
   name: string;
   tag: string;
   demo: string;
-  image: string;
+  slides: string[];
 };
 
 const initial: ActionResult = { ok: false };
@@ -34,7 +34,8 @@ export default function Composer({
   const [state, action, pending] = useActionState(createSocialPost, initial);
   const [templateSlug, setTemplateSlug] = useState("");
   const [caption, setCaption] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [customUrl, setCustomUrl] = useState("");
   const [type, setType] = useState<"post" | "reel">("post");
   const [mode, setMode] = useState<"addToQueue" | "customScheduled">("addToQueue");
   const [dueAtLocal, setDueAtLocal] = useState("");
@@ -43,8 +44,16 @@ export default function Composer({
     setTemplateSlug(slug);
     const t = templates.find((x) => x.slug === slug);
     if (t) {
-      setImageUrl(t.image);
+      setImages(t.slides);
       if (!caption.trim()) setCaption(draftCaption(t));
+    }
+  }
+
+  function addCustom() {
+    const u = customUrl.trim();
+    if (u && images.length < 10) {
+      setImages((prev) => [...prev, u]);
+      setCustomUrl("");
     }
   }
 
@@ -52,7 +61,7 @@ export default function Composer({
     if (state.ok) {
       setTemplateSlug("");
       setCaption("");
-      setImageUrl("");
+      setImages([]);
       setDueAtLocal("");
     }
   }, [state.ok]);
@@ -64,12 +73,12 @@ export default function Composer({
       <div className={s.panel} style={{ maxWidth: "none", marginBottom: 0 }}>
         <h2>Compose</h2>
         <p className={s.panelSub}>
-          Pick a template to prefill the image and a starter caption, then
-          schedule.
+          Pick a template to fill the carousel with branded slides (nothing gets
+          cropped), then schedule.
         </p>
         <form action={action}>
           <label className={styles.field}>
-            <span className={styles.label}>From a template (optional)</span>
+            <span className={styles.label}>From a template</span>
             <select
               className={s.select}
               value={templateSlug}
@@ -86,6 +95,56 @@ export default function Composer({
           <input type="hidden" name="templateSlug" value={templateSlug} />
 
           <label className={styles.field}>
+            <span className={styles.label}>
+              Carousel images ({images.length}/10)
+            </span>
+            {images.length === 0 ? (
+              <p className={s.hint}>
+                Pick a template above, or add image URLs below.
+              </p>
+            ) : (
+              <div className={s.thumbs}>
+                {images.map((url, i) => (
+                  <div className={s.thumb2} key={`${url}-${i}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt="" />
+                    <button
+                      type="button"
+                      className={s.thumbX}
+                      onClick={() =>
+                        setImages((prev) => prev.filter((_, j) => j !== i))
+                      }
+                      aria-label="Remove"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </label>
+          <div className={s.addRow}>
+            <input
+              className={styles.input}
+              value={customUrl}
+              onChange={(e) => setCustomUrl(e.target.value)}
+              placeholder="Add an image URL (must be public)…"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addCustom();
+                }
+              }}
+            />
+            <button type="button" className={s.addBtn} onClick={addCustom}>
+              Add
+            </button>
+          </div>
+          {images.map((url, i) => (
+            <input key={i} type="hidden" name="imageUrls" value={url} />
+          ))}
+
+          <label className={styles.field} style={{ marginTop: 16 }}>
             <span className={styles.label}>Caption</span>
             <textarea
               className={s.textarea}
@@ -96,22 +155,7 @@ export default function Composer({
             />
           </label>
 
-          <label className={styles.field}>
-            <span className={styles.label}>Image URL</span>
-            <input
-              className={styles.input}
-              name="imageUrl"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://…"
-              required
-            />
-          </label>
-          <p className={s.hint}>
-            Instagram requires an image — it must be a public URL.
-          </p>
-
-          <div className={s.row} style={{ marginTop: 16 }}>
+          <div className={s.row}>
             <label className={styles.field}>
               <span className={styles.label}>Type</span>
               <select
@@ -167,7 +211,7 @@ export default function Composer({
         <InstagramPreview
           username={username}
           caption={caption}
-          imageUrl={imageUrl}
+          imageUrls={images}
           type={type}
         />
       </div>

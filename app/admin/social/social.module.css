@@ -242,6 +242,68 @@
   display: block;
 }
 
+/* composer carousel thumbnails */
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.thumb2 {
+  position: relative;
+  width: 52px;
+  height: 65px;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  flex-shrink: 0;
+}
+.thumb2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.thumbX {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.addRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.addRow input {
+  flex: 1;
+}
+.addBtn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 0 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.addBtn:hover {
+  color: var(--acc);
+  border-color: var(--acc);
+}
+
 /* Instagram post card (faithful light-mode) */
 .igCard {
   width: 100%;
@@ -292,11 +354,60 @@
 }
 .igMedia {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 5;
   background: #efefef;
 }
 .igMediaReel {
   aspect-ratio: 4 / 5;
+}
+.igCount {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.igArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.igArrowL {
+  left: 8px;
+}
+.igArrowR {
+  right: 8px;
+}
+.igDotsRow {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 0 2px;
+}
+.igDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c7c7c7;
+}
+.igDotOn {
+  background: #0095f6;
 }
 .igMedia img {
   width: 100%;

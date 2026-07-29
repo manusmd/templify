@@ -58,7 +58,7 @@ export async function getChannels(
 export type CreatePostArgs = {
   channelId: string;
   text: string;
-  imageUrl: string;
+  imageUrls: string[]; // one = single post, many = carousel
   altText?: string;
   igType?: "post" | "reel" | "story";
   mode: "addToQueue" | "customScheduled";
@@ -72,14 +72,12 @@ export async function createPost(
   const input: Record<string, unknown> = {
     channelId: a.channelId,
     text: a.text,
-    assets: [
-      {
-        image: {
-          url: a.imageUrl,
-          ...(a.altText ? { metadata: { altText: a.altText } } : {}),
-        },
+    assets: a.imageUrls.map((url) => ({
+      image: {
+        url,
+        ...(a.altText ? { metadata: { altText: a.altText } } : {}),
       },
-    ],
+    })),
     metadata: {
       instagram: { type: a.igType ?? "post", shouldShareToFeed: true },
     },

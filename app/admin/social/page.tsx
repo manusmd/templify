@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getBufferConfig } from "@/lib/settings";
 import { getChannels, type BufferChannel, type PostMetric } from "@/lib/buffer";
 import { templates } from "@/lib/templates";
+import { TEMPLATE_SHOTS, slideUrl } from "@/lib/social";
 import { disconnectBuffer, refreshMetrics } from "./actions";
 import AdminShell from "../AdminShell";
 import ConnectForm from "./ConnectForm";
@@ -37,14 +38,19 @@ export default async function SocialPage() {
 
   const publicBase = process.env.BETTER_AUTH_URL ?? "";
   const templateOptions = templates
-    .filter((t) => t.demo && t.image)
-    .map((t) => ({
-      slug: t.slug,
-      name: t.name,
-      tag: t.tag.replace(/\s*·\s*Live\s*$/i, ""),
-      demo: t.demo!,
-      image: `${publicBase}${t.image}`,
-    }));
+    .filter((t) => t.demo && TEMPLATE_SHOTS[t.slug])
+    .map((t) => {
+      const tag = t.tag.replace(/\s*·\s*Live\s*$/i, "");
+      return {
+        slug: t.slug,
+        name: t.name,
+        tag,
+        demo: t.demo!,
+        slides: TEMPLATE_SHOTS[t.slug].map((sfx) =>
+          slideUrl(publicBase, `/templates/${t.slug}-${sfx}.jpg`, t.name, tag),
+        ),
+      };
+    });
 
   return (
     <AdminShell email={session.user.email} active="/admin/social">
