@@ -81,10 +81,18 @@ export default function FerroDetail() {
             </p>
             <div className={styles.actions}>
               <a
-                href={REPO}
+                href={ferro.demo}
                 target="_blank"
                 rel="noreferrer"
                 className="pill-solid"
+              >
+                Live preview ↗
+              </a>
+              <a
+                href={REPO}
+                target="_blank"
+                rel="noreferrer"
+                className="pill"
               >
                 View on GitHub ↗
               </a>

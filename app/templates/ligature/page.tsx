@@ -80,10 +80,18 @@ export default function LigatureDetail() {
             </p>
             <div className={styles.actions}>
               <a
-                href={REPO}
+                href={ligature.demo}
                 target="_blank"
                 rel="noreferrer"
                 className="pill-solid"
+              >
+                Live preview ↗
+              </a>
+              <a
+                href={REPO}
+                target="_blank"
+                rel="noreferrer"
+                className="pill"
               >
                 View on GitHub ↗
               </a>

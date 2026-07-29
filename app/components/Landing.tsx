@@ -52,20 +52,34 @@ function TemplateCard({ t }: { t: Template }) {
     </>
   );
   const style = { gridColumn: `span ${t.span}`, ...t.style };
-  return t.href ? (
-    <a
-      href={t.href}
-      target="_blank"
-      rel="noreferrer"
-      className="tm-card"
-      style={style}
-    >
-      {inner}
-    </a>
-  ) : (
-    <Link href={`/templates/${t.slug}`} className="tm-card" style={style}>
-      {inner}
-    </Link>
+  return (
+    <div className="tm-card" style={style}>
+      {t.href ? (
+        <a
+          href={t.href}
+          target="_blank"
+          rel="noreferrer"
+          className="tm-card-link"
+        >
+          {inner}
+        </a>
+      ) : (
+        <Link href={`/templates/${t.slug}`} className="tm-card-link">
+          {inner}
+        </Link>
+      )}
+      {t.demo && (
+        <a
+          href={t.demo}
+          target="_blank"
+          rel="noreferrer"
+          className="tm-card-preview"
+          aria-label={`Open the live preview of ${t.name}`}
+        >
+          Live ↗
+        </a>
+      )}
+    </div>
   );
 }
 

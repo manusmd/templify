@@ -431,11 +431,40 @@ a:hover {
   gap: 26px;
 }
 .tm-card {
+  position: relative;
+}
+.tm-card-link {
   display: block;
   color: var(--fg);
 }
-.tm-card:hover {
+.tm-card-link:hover {
   color: var(--fg);
+}
+.tm-card-preview {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background: color-mix(in oklch, var(--bg) 62%, transparent);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  padding: 7px 13px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tm-card:hover .tm-card-preview {
+  transform: translateY(-2px);
+}
+.tm-card-preview:hover {
+  background: var(--acc);
+  color: oklch(0.14 0.006 80);
+  border-color: var(--acc);
 }
 .tm-frame {
   position: relative;

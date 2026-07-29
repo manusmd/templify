@@ -18,6 +18,8 @@ export type Template = {
   image?: string;
   /** Public repo for a shipped template (shown on its detail page). */
   repo?: string;
+  /** Live demo URL (the deployed site) — enables the preview button. */
+  demo?: string;
 };
 
 /** A themed collection (a season's drop). Templates are grouped by these. */
@@ -43,6 +45,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/mesa-card.jpg",
     repo: "https://github.com/manusmd/templify-mesa",
+    demo: "https://mesa.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -55,6 +58,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/ligature-card.jpg",
     repo: "https://github.com/manusmd/templify-ligature",
+    demo: "https://ligature.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -67,6 +71,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/aperture-card.jpg",
     repo: "https://github.com/manusmd/templify-aperture",
+    demo: "https://aperture.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -79,6 +84,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/marfa-card.jpg",
     repo: "https://github.com/manusmd/templify-marfa",
+    demo: "https://marfa.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -91,6 +97,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/verso-card.jpg",
     repo: "https://github.com/manusmd/templify-verso",
+    demo: "https://verso.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -103,6 +110,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/halcyon-card.jpg",
     repo: "https://github.com/manusmd/templify-halcyon",
+    demo: "https://halcyon.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -115,6 +123,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/atlas-co-card.jpg",
     repo: "https://github.com/manusmd/templify-atlas",
+    demo: "https://atlas.projects.manu-web.de",
   },
   {
     num: "NEW",
@@ -127,6 +136,7 @@ export const templates: Template[] = [
     available: true,
     image: "/templates/ferro-card.jpg",
     repo: "https://github.com/manusmd/templify-ferro",
+    demo: "https://ferro.projects.manu-web.de",
   },
 ];
 
