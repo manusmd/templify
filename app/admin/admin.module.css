@@ -159,6 +159,14 @@
   border-radius: 12px;
   padding: 22px;
 }
+.modcard.modcardLink {
+  display: block;
+  color: var(--fg);
+  transition: border-color 0.2s ease;
+}
+.modcard.modcardLink:hover {
+  border-color: var(--acc);
+}
 .modcard h3 {
   font-family: var(--font-serif), serif;
   font-size: 19px;

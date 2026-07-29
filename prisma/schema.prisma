@@ -60,3 +60,26 @@ model Verification {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+// Key/value app settings (e.g. the encrypted Buffer API key + selected channel).
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// A social post drafted/scheduled through the admin, mirrored from Buffer.
+model SocialPost {
+  id           String    @id @default(cuid())
+  caption      String
+  imageUrl     String
+  type         String    @default("post") // post | reel | story
+  mode         String    @default("customScheduled") // addToQueue | customScheduled
+  status       String    @default("scheduled") // draft | scheduled | sent | failed
+  scheduledAt  DateTime?
+  bufferPostId String?
+  templateSlug String?
+  error        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
