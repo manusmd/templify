@@ -22,6 +22,12 @@ export async function GET(req: Request) {
   const aspect = searchParams.get("aspect") ?? "4x5";
   const { w, h } = ASPECTS[aspect] ?? ASPECTS["4x5"];
 
+  // Only compose our own hosted images (prevents SSRF / branding-endpoint abuse).
+  const base = process.env.BETTER_AUTH_URL ?? "";
+  if (!img || (base && !img.startsWith(`${base}/templates/`))) {
+    return new Response("Invalid image", { status: 400 });
+  }
+
   const font = await readFile(
     join(process.cwd(), "public", "fonts", "InstrumentSerif.ttf"),
   );
