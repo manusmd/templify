@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Manrope, JetBrains_Mono } from "next/font/google";
 import SmoothScroll from "./components/SmoothScroll";
+import Analytics from "./components/Analytics";
+import ConsentBanner from "./components/ConsentBanner";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -50,6 +52,8 @@ export default function RootLayout({
       >
         <SmoothScroll />
         {children}
+        <ConsentBanner />
+        <Analytics />
       </body>
     </html>
   );

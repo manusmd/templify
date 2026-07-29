@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageSlot from "./ImageSlot";
+import CookieSettingsButton from "./CookieSettingsButton";
 import type { Template } from "@/lib/templates";
 import { collections, collectionTemplates, featured } from "@/lib/templates";
 
@@ -419,7 +420,9 @@ export default function Landing() {
           <a href="https://github.com/manusmd" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <a href="#">Newsletter</a>
+          <Link href="/impressum">Impressum</Link>
+          <Link href="/datenschutz">Datenschutz</Link>
+          <CookieSettingsButton />
         </div>
         <span>© 2026</span>
       </footer>
