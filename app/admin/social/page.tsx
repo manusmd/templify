@@ -6,7 +6,11 @@ import { getBufferConfig, getSetting, SETTING } from "@/lib/settings";
 import { getChannels, type BufferChannel, type PostMetric } from "@/lib/buffer";
 import { templates } from "@/lib/templates";
 import { TEMPLATE_SHOTS, slideUrl } from "@/lib/social";
-import { disconnectBuffer, refreshMetrics } from "./actions";
+import {
+  disconnectBuffer,
+  refreshMetrics,
+  generateSlideDescriptions,
+} from "./actions";
 import AdminShell from "../AdminShell";
 import ConnectForm from "./ConnectForm";
 import ChannelPicker from "./ChannelPicker";
@@ -39,6 +43,13 @@ export default async function SocialPage() {
   const hasAiKey = Boolean(await getSetting(SETTING.anthropicApiKey));
 
   const publicBase = process.env.BETTER_AUTH_URL ?? "";
+  const descRows = cfg.connected ? await prisma.slideDescription.findMany() : [];
+  const descMap = new Map(descRows.map((d) => [d.key, d.text]));
+  const descTotal = Object.values(TEMPLATE_SHOTS).reduce(
+    (n, shots) => n + shots.length,
+    0,
+  );
+
   const templateOptions = templates
     .filter((t) => t.demo && TEMPLATE_SHOTS[t.slug])
     .map((t) => {
@@ -48,9 +59,10 @@ export default async function SocialPage() {
         name: t.name,
         tag,
         demo: t.demo!,
-        slides: TEMPLATE_SHOTS[t.slug].map((sfx) =>
-          slideUrl(publicBase, `/templates/${t.slug}-${sfx}.jpg`, t.name, tag),
-        ),
+        slides: TEMPLATE_SHOTS[t.slug].map((sfx) => {
+          const path = `/templates/${t.slug}-${sfx}.jpg`;
+          return slideUrl(publicBase, path, t.name, tag, descMap.get(path) ?? "");
+        }),
       };
     });
 
@@ -80,6 +92,25 @@ export default async function SocialPage() {
 
       {cfg.connected && (
         <>
+          <div className={s.descBar}>
+            <span className={s.hint}>
+              AI slide descriptions: {descMap.size}/{descTotal}
+            </span>
+            {hasAiKey ? (
+              <form action={generateSlideDescriptions}>
+                <button type="submit" className={s.refresh}>
+                  {descMap.size < descTotal
+                    ? "Generate descriptions"
+                    : "Regenerate missing"}
+                </button>
+              </form>
+            ) : (
+              <span className={s.hint}>
+                Add your Anthropic key below to enable
+              </span>
+            )}
+          </div>
+
           <Composer
             templates={templateOptions}
             username={cfg.channelName ?? "templify"}

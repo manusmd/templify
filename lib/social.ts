@@ -17,6 +17,7 @@ export function slideUrl(
   screenshotPath: string,
   title: string,
   tag: string,
+  desc = "",
   aspect = "4x5",
 ): string {
   const q = new URLSearchParams({
@@ -25,5 +26,6 @@ export function slideUrl(
     tag,
     aspect,
   });
+  if (desc) q.set("desc", desc);
   return `${base}/social/slide?${q.toString()}`;
 }

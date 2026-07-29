@@ -335,18 +335,25 @@
   cursor: default;
 }
 
-/* Instagram post card (faithful light-mode) */
+.descBar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+/* Instagram post card (faithful dark-mode) */
 .igCard {
   width: 100%;
   max-width: 348px;
-  background: #fff;
-  color: #262626;
-  border: 1px solid #dbdbdb;
+  background: #000;
+  color: #f5f5f5;
+  border: 1px solid #262626;
   border-radius: 12px;
   overflow: hidden;
   font-family:
     var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  box-shadow: 0 18px 50px -28px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 18px 50px -28px rgba(0, 0, 0, 0.8);
 }
 .igHead {
   display: flex;
@@ -366,8 +373,8 @@
   width: 27px;
   height: 27px;
   border-radius: 50%;
-  background: #fff;
-  color: #262626;
+  background: #000;
+  color: #f5f5f5;
   display: grid;
   place-items: center;
   font-weight: 700;
@@ -379,14 +386,14 @@
   flex: 1;
 }
 .igDots {
-  color: #262626;
+  color: #f5f5f5;
   letter-spacing: 1.5px;
   font-size: 15px;
 }
 .igMedia {
   position: relative;
   aspect-ratio: 4 / 5;
-  background: #efefef;
+  background: #121212;
 }
 .igMediaReel {
   aspect-ratio: 4 / 5;
@@ -435,7 +442,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #c7c7c7;
+  background: #363636;
 }
 .igDotOn {
   background: #0095f6;
@@ -450,7 +457,7 @@
   height: 100%;
   display: grid;
   place-items: center;
-  color: #b0b0b0;
+  color: #737373;
   font-size: 13px;
 }
 .igReelBadge {
@@ -480,7 +487,7 @@
 .igActions svg {
   width: 23px;
   height: 23px;
-  stroke: #262626;
+  stroke: #f5f5f5;
   fill: none;
   stroke-width: 1.7;
 }
@@ -500,16 +507,16 @@
   font-weight: 600;
 }
 .igTag {
-  color: #00376b;
+  color: #e0f1ff;
 }
 .igComments {
   padding: 4px 12px 0;
-  color: #8e8e8e;
+  color: #a8a8a8;
   font-size: 13px;
 }
 .igTime {
   padding: 5px 12px 12px;
-  color: #8e8e8e;
+  color: #a8a8a8;
   font-size: 10px;
   letter-spacing: 0.03em;
   text-transform: uppercase;

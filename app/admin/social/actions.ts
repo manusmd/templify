@@ -12,7 +12,12 @@ import {
   getBufferConfig,
 } from "@/lib/settings";
 import { getOrganizations, getChannels, createPost, getPost } from "@/lib/buffer";
-import { generateCaption as genCaption } from "@/lib/anthropic";
+import {
+  generateCaption as genCaption,
+  describeImage,
+} from "@/lib/anthropic";
+import { templates } from "@/lib/templates";
+import { TEMPLATE_SHOTS } from "@/lib/social";
 
 export type ActionResult = { ok: boolean; error?: string };
 
@@ -94,6 +99,32 @@ export async function generateCaption(args: {
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Generation failed." };
   }
+}
+
+export async function generateSlideDescriptions(): Promise<void> {
+  await requireSession();
+  const key = await getSetting(SETTING.anthropicApiKey);
+  if (!key) return;
+  const base = process.env.BETTER_AUTH_URL ?? "";
+
+  for (const [slug, shots] of Object.entries(TEMPLATE_SHOTS)) {
+    const t = templates.find((x) => x.slug === slug);
+    if (!t) continue;
+    for (const shot of shots) {
+      const path = `/templates/${slug}-${shot}.jpg`;
+      const existing = await prisma.slideDescription.findUnique({
+        where: { key: path },
+      });
+      if (existing) continue;
+      try {
+        const text = await describeImage(key, `${base}${path}`);
+        await prisma.slideDescription.create({ data: { key: path, text } });
+      } catch {
+        // Skip individual failures; a re-run picks up the rest.
+      }
+    }
+  }
+  revalidatePath("/admin/social");
 }
 
 export async function disconnectBuffer(): Promise<void> {

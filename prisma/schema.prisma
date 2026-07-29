@@ -80,6 +80,14 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+// AI (vision) description of a template screenshot, keyed by its path. Cached
+// because screenshots never change — generated once, reused on every slide.
+model SlideDescription {
+  key       String   @id // e.g. "/templates/verso-hero.jpg"
+  text      String
+  createdAt DateTime @default(now())
+}
+
 // A social post drafted/scheduled through the admin, mirrored from Buffer.
 model SocialPost {
   id           String    @id @default(cuid())

@@ -19,6 +19,7 @@ export async function GET(req: Request) {
   const img = searchParams.get("img") ?? "";
   const title = searchParams.get("title") ?? "Templify";
   const tag = searchParams.get("tag") ?? "";
+  const desc = searchParams.get("desc") ?? "";
   const aspect = searchParams.get("aspect") ?? "4x5";
   const { w, h } = ASPECTS[aspect] ?? ASPECTS["4x5"];
 
@@ -115,16 +116,18 @@ export async function GET(req: Request) {
           >
             {title}
           </div>
-          <div
-            style={{
-              fontSize: w * 0.03,
-              color: "#e9c46a",
-              marginTop: w * 0.02,
-              display: "flex",
-            }}
-          >
-            templify.projects.manu-web.de
-          </div>
+          {desc && (
+            <div
+              style={{
+                fontSize: w * 0.032,
+                color: "#e9c46a",
+                marginTop: w * 0.02,
+                display: "flex",
+              }}
+            >
+              {desc}
+            </div>
+          )}
         </div>
       </div>
     ),

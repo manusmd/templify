@@ -57,3 +57,54 @@ export async function generateCaption(
   if (!text) throw new Error("No caption was returned.");
   return text;
 }
+
+// Vision: a short phrase describing a screenshot, for the slide's subtitle.
+export async function describeImage(
+  apiKey: string,
+  imageUrl: string,
+): Promise<string> {
+  const img = await fetch(imageUrl).then((r) => {
+    if (!r.ok) throw new Error(`Could not load image (${r.status}).`);
+    return r.arrayBuffer();
+  });
+  const b64 = Buffer.from(img).toString("base64");
+
+  const res = await fetch(ENDPOINT, {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 40,
+      system:
+        "You caption a website design screenshot in 4–7 words for a slide subtitle. Describe the visual/design (layout, mood, type). No period, no quotes, no marketing hype. Return only the phrase.",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "image",
+              source: { type: "base64", media_type: "image/jpeg", data: b64 },
+            },
+            { type: "text", text: "Describe this website screenshot." },
+          ],
+        },
+      ],
+    }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Anthropic rejected the API key.");
+    throw new Error(data?.error?.message ?? `Anthropic error (${res.status}).`);
+  }
+  const text = (data?.content ?? [])
+    .map((b: { type: string; text?: string }) => (b.type === "text" ? b.text : ""))
+    .join("")
+    .trim()
+    .replace(/^["']|["'.]+$/g, "");
+  if (!text) throw new Error("No description returned.");
+  return text;
+}
