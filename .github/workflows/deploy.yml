@@ -9,6 +9,6 @@ jobs:
     permissions:
       contents: write
       packages: write
-    uses: manusmd/projects-infrastructure/.github/workflows/build-and-deploy.yml@main
+    uses: manusmd/github-workflows/.github/workflows/build-and-deploy.yml@main
     with:
       app-name: templify
