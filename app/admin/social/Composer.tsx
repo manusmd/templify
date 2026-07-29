@@ -46,7 +46,9 @@ export default function Composer({
   const [images, setImages] = useState<string[]>([]);
   const [customUrl, setCustomUrl] = useState("");
   const [type, setType] = useState<"post" | "reel">("post");
-  const [mode, setMode] = useState<"addToQueue" | "customScheduled">("addToQueue");
+  const [mode, setMode] = useState<
+    "shareNow" | "shareNext" | "addToQueue" | "customScheduled"
+  >("addToQueue");
   const [dueAtLocal, setDueAtLocal] = useState("");
 
   // AI captions
@@ -263,9 +265,17 @@ export default function Composer({
                 name="mode"
                 value={mode}
                 onChange={(e) =>
-                  setMode(e.target.value as "addToQueue" | "customScheduled")
+                  setMode(
+                    e.target.value as
+                      | "shareNow"
+                      | "shareNext"
+                      | "addToQueue"
+                      | "customScheduled",
+                  )
                 }
               >
+                <option value="shareNow">Post now</option>
+                <option value="shareNext">Post next</option>
                 <option value="addToQueue">Add to queue</option>
                 <option value="customScheduled">Specific time</option>
               </select>
@@ -285,11 +295,19 @@ export default function Composer({
           <input type="hidden" name="dueAt" value={dueAtIso} />
 
           <button className={styles.btn} disabled={pending}>
-            {pending ? "Scheduling…" : "Schedule post"}
+            {pending
+              ? "Working…"
+              : mode === "shareNow"
+                ? "Post now"
+                : "Schedule post"}
           </button>
           {state.error && <p className={styles.error}>{state.error}</p>}
           {state.ok && (
-            <p className={s.ok}>Scheduled — it&rsquo;s in your Buffer queue.</p>
+            <p className={s.ok}>
+              {mode === "shareNow"
+                ? "Published to Instagram."
+                : "Scheduled — it’s in your Buffer queue."}
+            </p>
           )}
         </form>
       </div>

@@ -335,6 +335,72 @@
   cursor: default;
 }
 
+/* posts page actions */
+.postActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.pubBtn {
+  background: var(--acc);
+  border: 0;
+  color: oklch(0.14 0.006 80);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.pubBtn:hover {
+  filter: brightness(1.06);
+}
+.delBtn {
+  background: none;
+  border: 1px solid var(--line-strong);
+  color: var(--muted-dimmer);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.delBtn:hover {
+  color: oklch(0.72 0.16 25);
+  border-color: oklch(0.72 0.16 25);
+}
+
+/* analytics stat tiles */
+.statRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 6px 0 30px;
+}
+.stat {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 20px;
+  min-width: 130px;
+}
+.statValue {
+  font-family: var(--font-serif), serif;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.statLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-dimmer);
+  margin-top: 6px;
+}
+
 .descBar {
   display: flex;
   align-items: center;

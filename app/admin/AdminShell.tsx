@@ -2,7 +2,11 @@ import Link from "next/link";
 import LogoutButton from "./dashboard/LogoutButton";
 import styles from "./admin.module.css";
 
-function Icon({ name }: { name: "dashboard" | "social" | "security" }) {
+function Icon({
+  name,
+}: {
+  name: "dashboard" | "social" | "posts" | "analytics" | "security";
+}) {
   const common = {
     width: 18,
     height: 18,
@@ -30,6 +34,21 @@ function Icon({ name }: { name: "dashboard" | "social" | "security" }) {
         <circle cx="17.4" cy="6.6" r="0.9" fill="currentColor" stroke="none" />
       </svg>
     );
+  if (name === "posts")
+    return (
+      <svg {...common}>
+        <rect x="3" y="4" width="18" height="7" rx="1.5" />
+        <rect x="3" y="14" width="18" height="6" rx="1.5" />
+      </svg>
+    );
+  if (name === "analytics")
+    return (
+      <svg {...common}>
+        <line x1="6" y1="20" x2="6" y2="13" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="18" y1="20" x2="18" y2="9" />
+      </svg>
+    );
   return (
     <svg {...common}>
       <path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z" />
@@ -40,6 +59,8 @@ function Icon({ name }: { name: "dashboard" | "social" | "security" }) {
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "dashboard" as const },
   { href: "/admin/social", label: "Social", icon: "social" as const },
+  { href: "/admin/posts", label: "Posts", icon: "posts" as const },
+  { href: "/admin/analytics", label: "Analytics", icon: "analytics" as const },
   { href: "/admin/security", label: "Security", icon: "security" as const },
 ];
 

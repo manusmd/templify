@@ -61,9 +61,15 @@ export type CreatePostArgs = {
   imageUrls: string[]; // one = single post, many = carousel
   altText?: string;
   igType?: "post" | "reel" | "story";
-  mode: "addToQueue" | "customScheduled";
+  mode: ShareMode;
   dueAt?: string; // ISO 8601 UTC, required for customScheduled
 };
+
+export type ShareMode =
+  | "shareNow"
+  | "shareNext"
+  | "addToQueue"
+  | "customScheduled";
 
 export async function createPost(
   apiKey: string,
@@ -141,4 +147,34 @@ export async function getPost(
     metrics: data.post.metrics ?? [],
     metricsUpdatedAt: data.post.metricsUpdatedAt ?? null,
   };
+}
+
+// Publish an already-scheduled post immediately (no dedicated mutation — editPost + shareNow).
+export async function publishPostNow(
+  apiKey: string,
+  postId: string,
+): Promise<void> {
+  const data = await gql<{
+    editPost: { post?: { id: string }; message?: string };
+  }>(
+    apiKey,
+    `mutation Edit($input: EditPostInput!) {
+      editPost(input: $input) {
+        ... on PostActionSuccess { post { id status } }
+        ... on MutationError { message }
+      }
+    }`,
+    { input: { id: postId, mode: "shareNow" } },
+  );
+  if (data.editPost?.message) throw new Error(data.editPost.message);
+}
+
+export async function deletePost(apiKey: string, postId: string): Promise<void> {
+  await gql(
+    apiKey,
+    `mutation Del($input: DeletePostInput!) {
+      deletePost(input: $input) { __typename }
+    }`,
+    { input: { id: postId } },
+  );
 }

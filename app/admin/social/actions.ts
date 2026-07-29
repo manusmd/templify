@@ -11,7 +11,15 @@ import {
   getSetting,
   getBufferConfig,
 } from "@/lib/settings";
-import { getOrganizations, getChannels, createPost, getPost } from "@/lib/buffer";
+import {
+  getOrganizations,
+  getChannels,
+  createPost,
+  getPost,
+  publishPostNow,
+  deletePost as bufferDeletePost,
+  type ShareMode,
+} from "@/lib/buffer";
 import {
   generateCaption as genCaption,
   describeImage,
@@ -166,7 +174,43 @@ export async function refreshMetrics(): Promise<void> {
       }
     }),
   );
-  revalidatePath("/admin/social");
+  revalidatePath("/admin/posts");
+  revalidatePath("/admin/analytics");
+}
+
+export async function publishPost(id: string): Promise<void> {
+  await requireSession();
+  const cfg = await getBufferConfig();
+  const post = await prisma.socialPost.findUnique({ where: { id } });
+  if (!cfg.apiKey || !post?.bufferPostId) return;
+  try {
+    await publishPostNow(cfg.apiKey, post.bufferPostId);
+    await prisma.socialPost.update({
+      where: { id },
+      data: { status: "sent", error: null },
+    });
+  } catch (e) {
+    await prisma.socialPost.update({
+      where: { id },
+      data: { error: e instanceof Error ? e.message : "Publish failed." },
+    });
+  }
+  revalidatePath("/admin/posts");
+}
+
+export async function deleteSocialPost(id: string): Promise<void> {
+  await requireSession();
+  const cfg = await getBufferConfig();
+  const post = await prisma.socialPost.findUnique({ where: { id } });
+  if (post?.bufferPostId && cfg.apiKey) {
+    try {
+      await bufferDeletePost(cfg.apiKey, post.bufferPostId);
+    } catch {
+      // If Buffer delete fails (e.g. already sent), still remove our mirror.
+    }
+  }
+  await prisma.socialPost.delete({ where: { id } }).catch(() => {});
+  revalidatePath("/admin/posts");
 }
 
 export async function createSocialPost(
@@ -183,9 +227,7 @@ export async function createSocialPost(
     | "post"
     | "reel"
     | "story";
-  const mode = String(formData.get("mode") ?? "addToQueue") as
-    | "addToQueue"
-    | "customScheduled";
+  const mode = String(formData.get("mode") ?? "addToQueue") as ShareMode;
   const dueAtLocal = String(formData.get("dueAt") ?? "");
   const templateSlug = String(formData.get("templateSlug") ?? "") || null;
 

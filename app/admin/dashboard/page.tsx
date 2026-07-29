@@ -10,14 +10,21 @@ export const dynamic = "force-dynamic";
 const modules = [
   {
     title: "Social",
-    body: "Compose and schedule Instagram posts through Buffer, with template-aware drafts.",
+    body: "Compose and schedule Instagram carousels through Buffer, with AI captions.",
     href: "/admin/social",
     status: "Open",
   },
   {
-    title: "Templates",
-    body: "Manage the template index and collections.",
-    status: "Planned",
+    title: "Posts",
+    body: "Your scheduled and published posts — publish now, delete, sync status.",
+    href: "/admin/posts",
+    status: "Open",
+  },
+  {
+    title: "Analytics",
+    body: "Instagram engagement per post, pulled from Buffer.",
+    href: "/admin/analytics",
+    status: "Open",
   },
   {
     title: "Security",
@@ -26,8 +33,8 @@ const modules = [
     status: "Open",
   },
   {
-    title: "Analytics",
-    body: "Countly insights alongside social engagement.",
+    title: "Templates",
+    body: "Manage the template index and collections.",
     status: "Planned",
   },
 ];

@@ -3,14 +3,10 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getBufferConfig, getSetting, SETTING } from "@/lib/settings";
-import { getChannels, type BufferChannel, type PostMetric } from "@/lib/buffer";
+import { getChannels, type BufferChannel } from "@/lib/buffer";
 import { templates } from "@/lib/templates";
 import { TEMPLATE_SHOTS, slideUrl } from "@/lib/social";
-import {
-  disconnectBuffer,
-  refreshMetrics,
-  generateSlideDescriptions,
-} from "./actions";
+import { disconnectBuffer, generateSlideDescriptions } from "./actions";
 import AdminShell from "../AdminShell";
 import ConnectForm from "./ConnectForm";
 import ChannelPicker from "./ChannelPicker";
@@ -35,10 +31,6 @@ export default async function SocialPage() {
       channelsError = e instanceof Error ? e.message : "Could not load channels.";
     }
   }
-
-  const posts = cfg.connected
-    ? await prisma.socialPost.findMany({ orderBy: { createdAt: "desc" }, take: 30 })
-    : [];
 
   const hasAiKey = Boolean(await getSetting(SETTING.anthropicApiKey));
 
@@ -117,72 +109,7 @@ export default async function SocialPage() {
             hasAiKey={hasAiKey}
           />
 
-          <div style={{ marginTop: 40 }}>
-            <div className={s.postsHead}>
-              <h2 style={{ fontFamily: "var(--font-serif), serif", fontSize: 24 }}>
-                Recent posts
-              </h2>
-              <form action={refreshMetrics}>
-                <button type="submit" className={s.refresh}>
-                  Refresh metrics
-                </button>
-              </form>
-            </div>
-            {posts.length === 0 ? (
-              <p className={s.empty}>Nothing scheduled yet.</p>
-            ) : (
-              <div className={s.posts}>
-                {posts.map((p) => {
-                  const metrics = (p.metrics as PostMetric[] | null) ?? [];
-                  return (
-                    <div className={s.post} key={p.id}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className={s.postImg} src={p.imageUrl} alt="" />
-                      <div className={s.postBody}>
-                        <div className={s.postCaption}>{p.caption}</div>
-                        <div className={s.postMeta}>
-                          <span
-                            className={`${s.badge} ${
-                              p.status === "sent"
-                                ? s.badgeSent
-                                : p.status === "failed"
-                                  ? s.badgeFailed
-                                  : s.badgeScheduled
-                            }`}
-                          >
-                            {p.status}
-                          </span>
-                          <span>{p.type}</span>
-                          {p.scheduledAt && (
-                            <span>
-                              {p.scheduledAt.toISOString().slice(0, 16).replace("T", " ")} UTC
-                            </span>
-                          )}
-                          {p.error && <span title={p.error}>· {p.error.slice(0, 60)}</span>}
-                        </div>
-                        {metrics.length > 0 && (
-                          <div className={s.metrics}>
-                            {metrics.map((m) => (
-                              <span className={s.metric} key={m.type}>
-                                <strong>
-                                  {m.unit === "percentage"
-                                    ? `${m.value}%`
-                                    : m.value.toLocaleString()}
-                                </strong>{" "}
-                                {m.name}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          <form action={disconnectBuffer} style={{ marginTop: 28 }}>
+          <form action={disconnectBuffer} style={{ marginTop: 32 }}>
             <button type="submit" className={s.link}>
               Disconnect Buffer
             </button>
