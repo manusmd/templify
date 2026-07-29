@@ -164,7 +164,7 @@ export async function publishPostNow(
         ... on MutationError { message }
       }
     }`,
-    { input: { id: postId, mode: "shareNow" } },
+    { input: { id: postId, mode: "shareNow", schedulingType: "automatic" } },
   );
   if (data.editPost?.message) throw new Error(data.editPost.message);
 }

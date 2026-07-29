@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getBufferConfig } from "@/lib/settings";
 import { refreshMetrics, publishPost, deleteSocialPost } from "../social/actions";
+import { formatDe } from "@/lib/format";
 import AdminShell from "../AdminShell";
 import styles from "../admin.module.css";
 import s from "../social/social.module.css";
@@ -64,12 +65,7 @@ export default async function PostsPage() {
                     </span>
                     <span>{p.type}</span>
                     {slides > 1 && <span>· {slides} slides</span>}
-                    {p.scheduledAt && (
-                      <span>
-                        {p.scheduledAt.toISOString().slice(0, 16).replace("T", " ")}{" "}
-                        UTC
-                      </span>
-                    )}
+                    {p.scheduledAt && <span>{formatDe(p.scheduledAt)}</span>}
                     {p.error && <span title={p.error}>· {p.error.slice(0, 50)}</span>}
                   </div>
                   <div className={s.postActions}>

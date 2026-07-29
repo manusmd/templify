@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { PostMetric } from "@/lib/buffer";
 import { refreshMetrics } from "../social/actions";
+import { formatDe } from "@/lib/format";
 import AdminShell from "../AdminShell";
 import styles from "../admin.module.css";
 import s from "../social/social.module.css";
@@ -88,14 +89,7 @@ export default async function AnalyticsPage() {
                   </div>
                   {p.metricsUpdatedAt && (
                     <div className={s.postMeta}>
-                      <span>
-                        updated{" "}
-                        {p.metricsUpdatedAt
-                          .toISOString()
-                          .slice(0, 16)
-                          .replace("T", " ")}{" "}
-                        UTC
-                      </span>
+                      <span>aktualisiert {formatDe(p.metricsUpdatedAt)}</span>
                     </div>
                   )}
                 </div>
