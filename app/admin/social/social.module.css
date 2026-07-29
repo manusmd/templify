@@ -304,6 +304,37 @@
   border-color: var(--acc);
 }
 
+/* AI caption row */
+.aiRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.aiRow input {
+  flex: 1;
+}
+.aiBtn {
+  flex-shrink: 0;
+  background: color-mix(in oklch, var(--acc) 14%, transparent);
+  border: 1px solid color-mix(in oklch, var(--acc) 45%, var(--line-strong));
+  color: var(--acc);
+  border-radius: 10px;
+  padding: 0 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.aiBtn:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--acc) 22%, transparent);
+}
+.aiBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* Instagram post card (faithful light-mode) */
 .igCard {
   width: 100%;

@@ -7,9 +7,13 @@ export const SETTING = {
   bufferOrgId: "buffer.organizationId",
   bufferChannelId: "buffer.channelId",
   bufferChannelName: "buffer.channelName",
+  anthropicApiKey: "anthropic.apiKey",
 } as const;
 
-const SECRET_KEYS = new Set<string>([SETTING.bufferApiKey]);
+const SECRET_KEYS = new Set<string>([
+  SETTING.bufferApiKey,
+  SETTING.anthropicApiKey,
+]);
 
 export async function getSetting(key: string): Promise<string | null> {
   const row = await prisma.setting.findUnique({ where: { key } });

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getBufferConfig } from "@/lib/settings";
+import { getBufferConfig, getSetting, SETTING } from "@/lib/settings";
 import { getChannels, type BufferChannel, type PostMetric } from "@/lib/buffer";
 import { templates } from "@/lib/templates";
 import { TEMPLATE_SHOTS, slideUrl } from "@/lib/social";
@@ -35,6 +35,8 @@ export default async function SocialPage() {
   const posts = cfg.connected
     ? await prisma.socialPost.findMany({ orderBy: { createdAt: "desc" }, take: 30 })
     : [];
+
+  const hasAiKey = Boolean(await getSetting(SETTING.anthropicApiKey));
 
   const publicBase = process.env.BETTER_AUTH_URL ?? "";
   const templateOptions = templates
@@ -81,6 +83,7 @@ export default async function SocialPage() {
           <Composer
             templates={templateOptions}
             username={cfg.channelName ?? "templify"}
+            hasAiKey={hasAiKey}
           />
 
           <div style={{ marginTop: 40 }}>

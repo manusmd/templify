@@ -1,7 +1,13 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { createSocialPost, type ActionResult } from "./actions";
+import { useRouter } from "next/navigation";
+import {
+  createSocialPost,
+  generateCaption,
+  saveAiKey,
+  type ActionResult,
+} from "./actions";
 import InstagramPreview from "./InstagramPreview";
 import styles from "../admin.module.css";
 import s from "./social.module.css";
@@ -27,10 +33,13 @@ Real typography, real motion, built like client work. Live now → ${t.demo}
 export default function Composer({
   templates,
   username,
+  hasAiKey,
 }: {
   templates: TemplateOption[];
   username: string;
+  hasAiKey: boolean;
 }) {
+  const router = useRouter();
   const [state, action, pending] = useActionState(createSocialPost, initial);
   const [templateSlug, setTemplateSlug] = useState("");
   const [caption, setCaption] = useState("");
@@ -39,6 +48,45 @@ export default function Composer({
   const [type, setType] = useState<"post" | "reel">("post");
   const [mode, setMode] = useState<"addToQueue" | "customScheduled">("addToQueue");
   const [dueAtLocal, setDueAtLocal] = useState("");
+
+  // AI captions
+  const [aiHint, setAiHint] = useState("");
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiKeyInput, setAiKeyInput] = useState("");
+
+  async function onGenerate() {
+    const t = templates.find((x) => x.slug === templateSlug);
+    if (!t) return;
+    setAiBusy(true);
+    setAiError(null);
+    const res = await generateCaption({
+      name: t.name,
+      tag: t.tag,
+      demo: t.demo,
+      hint: aiHint.trim() || undefined,
+    });
+    setAiBusy(false);
+    if (!res.ok) {
+      setAiError(res.error ?? "Generation failed.");
+      return;
+    }
+    setCaption(res.caption ?? "");
+  }
+
+  async function onSaveAiKey() {
+    if (!aiKeyInput.trim()) return;
+    setAiBusy(true);
+    setAiError(null);
+    const res = await saveAiKey(aiKeyInput);
+    setAiBusy(false);
+    if (!res.ok) {
+      setAiError(res.error ?? "Could not save key.");
+      return;
+    }
+    setAiKeyInput("");
+    router.refresh();
+  }
 
   function pickTemplate(slug: string) {
     setTemplateSlug(slug);
@@ -154,6 +202,46 @@ export default function Composer({
               required
             />
           </label>
+
+          {hasAiKey ? (
+            <div className={s.aiRow}>
+              <input
+                className={styles.input}
+                value={aiHint}
+                onChange={(e) => setAiHint(e.target.value)}
+                placeholder="Steer the caption (optional): playful, focus on motion…"
+              />
+              <button
+                type="button"
+                className={s.aiBtn}
+                onClick={onGenerate}
+                disabled={aiBusy || !templateSlug}
+                title={!templateSlug ? "Pick a template first" : undefined}
+              >
+                {aiBusy ? "Writing…" : "✨ Generate caption"}
+              </button>
+            </div>
+          ) : (
+            <div className={s.aiRow}>
+              <input
+                className={styles.input}
+                type="password"
+                value={aiKeyInput}
+                onChange={(e) => setAiKeyInput(e.target.value)}
+                placeholder="Anthropic API key — enables ✨ AI captions"
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                className={s.aiBtn}
+                onClick={onSaveAiKey}
+                disabled={aiBusy || !aiKeyInput.trim()}
+              >
+                {aiBusy ? "Saving…" : "Save key"}
+              </button>
+            </div>
+          )}
+          {aiError && <p className={styles.error}>{aiError}</p>}
 
           <div className={s.row}>
             <label className={styles.field}>

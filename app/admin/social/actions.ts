@@ -8,9 +8,11 @@ import {
   SETTING,
   setSetting,
   clearSettings,
+  getSetting,
   getBufferConfig,
 } from "@/lib/settings";
 import { getOrganizations, getChannels, createPost, getPost } from "@/lib/buffer";
+import { generateCaption as genCaption } from "@/lib/anthropic";
 
 export type ActionResult = { ok: boolean; error?: string };
 
@@ -66,6 +68,32 @@ export async function selectChannel(
   await setSetting(SETTING.bufferChannelName, name);
   revalidatePath("/admin/social");
   return { ok: true };
+}
+
+export async function saveAiKey(key: string): Promise<ActionResult> {
+  await requireSession();
+  const trimmed = key.trim();
+  if (!trimmed) return { ok: false, error: "Paste your Anthropic API key." };
+  await setSetting(SETTING.anthropicApiKey, trimmed);
+  revalidatePath("/admin/social");
+  return { ok: true };
+}
+
+export async function generateCaption(args: {
+  name: string;
+  tag: string;
+  demo: string;
+  hint?: string;
+}): Promise<{ ok: boolean; caption?: string; error?: string }> {
+  await requireSession();
+  const key = await getSetting(SETTING.anthropicApiKey);
+  if (!key) return { ok: false, error: "Add your Anthropic API key first." };
+  try {
+    const caption = await genCaption(key, args);
+    return { ok: true, caption };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Generation failed." };
+  }
 }
 
 export async function disconnectBuffer(): Promise<void> {
