@@ -29,7 +29,7 @@ export default function TwoFactorPanel({ enabled }: { enabled: boolean }) {
     const { data, error } = await authClient.twoFactor.enable({ password });
     setBusy(false);
     if (error || !data) {
-      setError(error?.message ?? "Could not start setup. Check your password.");
+      setError(error?.message ?? "Could not start setup. Please try again.");
       return;
     }
     setTotpURI(data.totpURI);
