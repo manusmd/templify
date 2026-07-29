@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import AdminTopbar from "../AdminTopbar";
+import AdminShell from "../AdminShell";
 import styles from "../admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -37,38 +37,35 @@ export default async function Dashboard() {
   if (!session) redirect("/admin/login");
 
   return (
-    <div className={styles.wrap}>
-      <AdminTopbar email={session.user.email} />
-      <div className={styles.main}>
-        <h1 className={styles.h1}>Dashboard</h1>
-        <p className={styles.muted}>
-          Signed in as {session.user.email}. Pick a module to get started.
-        </p>
-        <div className={styles.cards}>
-          {modules.map((m) => {
-            const inner = (
-              <>
-                <h3>{m.title}</h3>
-                <p>{m.body}</p>
-                <span className={styles.soon}>{m.status}</span>
-              </>
-            );
-            return m.href ? (
-              <Link
-                href={m.href}
-                key={m.title}
-                className={`${styles.modcard} ${styles.modcardLink}`}
-              >
-                {inner}
-              </Link>
-            ) : (
-              <div className={styles.modcard} key={m.title}>
-                {inner}
-              </div>
-            );
-          })}
-        </div>
+    <AdminShell email={session.user.email} active="/admin/dashboard">
+      <h1 className={styles.h1}>Dashboard</h1>
+      <p className={styles.muted}>
+        Signed in as {session.user.email}. Pick a module to get started.
+      </p>
+      <div className={styles.cards}>
+        {modules.map((m) => {
+          const inner = (
+            <>
+              <h3>{m.title}</h3>
+              <p>{m.body}</p>
+              <span className={styles.soon}>{m.status}</span>
+            </>
+          );
+          return m.href ? (
+            <Link
+              href={m.href}
+              key={m.title}
+              className={`${styles.modcard} ${styles.modcardLink}`}
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div className={styles.modcard} key={m.title}>
+              {inner}
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </AdminShell>
   );
 }

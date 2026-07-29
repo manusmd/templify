@@ -215,3 +215,160 @@
   cursor: pointer;
   font: inherit;
 }
+
+/* two-column composer + preview */
+.composeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 348px;
+  gap: 34px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .composeGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.previewCol {
+  position: sticky;
+  top: 24px;
+}
+.previewLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-dimmer);
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Instagram post card (faithful light-mode) */
+.igCard {
+  width: 100%;
+  max-width: 348px;
+  background: #fff;
+  color: #262626;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family:
+    var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  box-shadow: 0 18px 50px -28px rgba(0, 0, 0, 0.65);
+}
+.igHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+}
+.igAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf);
+  display: grid;
+  place-items: center;
+}
+.igAvatarInner {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  color: #262626;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+.igUser {
+  font-weight: 600;
+  font-size: 13px;
+  flex: 1;
+}
+.igDots {
+  color: #262626;
+  letter-spacing: 1.5px;
+  font-size: 15px;
+}
+.igMedia {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #efefef;
+}
+.igMediaReel {
+  aspect-ratio: 4 / 5;
+}
+.igMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.igMediaEmpty {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #b0b0b0;
+  font-size: 13px;
+}
+.igReelBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.igActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px 3px;
+}
+.igActionsLeft {
+  display: flex;
+  gap: 14px;
+}
+.igActions svg {
+  width: 23px;
+  height: 23px;
+  stroke: #262626;
+  fill: none;
+  stroke-width: 1.7;
+}
+.igLikes {
+  padding: 3px 12px 0;
+  font-weight: 600;
+  font-size: 13px;
+}
+.igCaption {
+  padding: 4px 12px 2px;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.igCaption b {
+  font-weight: 600;
+}
+.igTag {
+  color: #00376b;
+}
+.igComments {
+  padding: 4px 12px 0;
+  color: #8e8e8e;
+  font-size: 13px;
+}
+.igTime {
+  padding: 5px 12px 12px;
+  color: #8e8e8e;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
