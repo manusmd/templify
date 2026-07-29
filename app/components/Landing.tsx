@@ -406,7 +406,9 @@ export default function Landing() {
         <span className="tm-footer-brand">Templify</span>
         <div className="tm-footer-links">
           <a href="#">Instagram</a>
-          <a href="#">Are.na</a>
+          <a href="https://github.com/manusmd" target="_blank" rel="noreferrer">
+            GitHub
+          </a>
           <a href="#">Newsletter</a>
         </div>
         <span>© 2026</span>
