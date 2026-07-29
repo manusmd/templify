@@ -9,3 +9,6 @@ npm-debug.log*
 .env*.local
 .vercel
 *.tsbuildinfo
+
+# local dev secrets (server-only)
+/.env

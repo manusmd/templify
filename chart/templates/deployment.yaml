@@ -16,11 +16,37 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-pull-secret
+      initContainers:
+        # Apply Prisma migrations before the app serves. Retries (initContainer
+        # restart) until Postgres is reachable, then runs to completion.
+        - name: migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "node_modules/prisma/build/index.js", "migrate", "deploy"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: templify-db
+                  key: DATABASE_URL
       containers:
         - name: {{ include "portfolio-app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.port }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: templify-db
+                  key: DATABASE_URL
+            - name: BETTER_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: templify-auth
+                  key: BETTER_AUTH_SECRET
+            - name: BETTER_AUTH_URL
+              value: {{ printf "https://%s" .Values.host | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
