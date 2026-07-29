@@ -20,6 +20,16 @@ export type Template = {
   repo?: string;
 };
 
+/** A themed collection (a season's drop). Templates are grouped by these. */
+export type Collection = {
+  num: string;
+  name: string;
+  /** One-line focus shown under the collection heading. */
+  focus: string;
+  /** Ordered template slugs that belong to this collection. */
+  slugs: string[];
+};
+
 export const templates: Template[] = [
   // ── Live templates ──
   {
@@ -28,7 +38,7 @@ export const templates: Template[] = [
     name: "Mesa",
     tag: "Restaurant · Live",
     placeholder: "Mesa — wood-fired restaurant site",
-    span: 4,
+    span: 6,
     aspect: "16 / 10",
     available: true,
     image: "/templates/mesa-card.jpg",
@@ -88,7 +98,7 @@ export const templates: Template[] = [
     name: "Halcyon",
     tag: "Boutique hotel · Live",
     placeholder: "Halcyon — boutique hotel site",
-    span: 4,
+    span: 6,
     aspect: "16 / 10",
     available: true,
     image: "/templates/halcyon-card.jpg",
@@ -120,6 +130,31 @@ export const templates: Template[] = [
   },
 ];
 
-/** The hero's featured release is Aperture — now a live template. */
+/**
+ * Themed collections. Each is a focused seasonal drop; the landing renders one
+ * titled block per collection. Add the next collection here and list its slugs.
+ */
+export const collections: Collection[] = [
+  {
+    num: "01",
+    name: "Studio & Editorial",
+    focus: "For studios, makers and editorial — creative practices and design-led brands.",
+    slugs: ["aperture", "ligature", "marfa", "verso", "atlas-co", "ferro"],
+  },
+  {
+    num: "02",
+    name: "Hospitality",
+    focus: "Places to stay and eat — hospitality with a point of view.",
+    slugs: ["halcyon", "mesa"],
+  },
+];
+
+/** Templates of a collection, in the collection's declared order. */
+export const collectionTemplates = (c: Collection): Template[] =>
+  c.slugs
+    .map((slug) => templates.find((t) => t.slug === slug))
+    .filter((t): t is Template => Boolean(t));
+
+/** The hero's featured release is Aperture — the flagship of Collection 01. */
 export const featured =
   templates.find((t) => t.slug === "aperture") ?? templates[0];

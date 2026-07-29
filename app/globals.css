@@ -388,6 +388,43 @@ a:hover {
   letter-spacing: -0.02em;
   font-weight: 400;
 }
+.tm-collection + .tm-collection {
+  margin-top: clamp(70px, 8vw, 120px);
+}
+.tm-collection-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px 48px;
+  flex-wrap: wrap;
+  padding-bottom: 26px;
+  margin-bottom: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 26px;
+}
+.tm-collection-head-left {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.tm-collection-num {
+  color: var(--acc);
+}
+.tm-collection-name {
+  font-family: var(--font-serif), serif;
+  font-size: clamp(24px, 2.6vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.tm-collection-focus {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 44ch;
+  margin: 0;
+}
 .tm-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);

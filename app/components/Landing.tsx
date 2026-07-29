@@ -6,7 +6,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageSlot from "./ImageSlot";
-import { templates, featured } from "@/lib/templates";
+import type { Template } from "@/lib/templates";
+import { collections, collectionTemplates, featured } from "@/lib/templates";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -18,6 +19,54 @@ const marqueeWords = [
   "Studio",
   "Retail",
 ];
+
+function TemplateCard({ t }: { t: Template }) {
+  const inner = (
+    <>
+      <div className="tm-frame" style={{ aspectRatio: t.aspect }}>
+        <div className="tm-img">
+          {t.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={t.image}
+              alt={`${t.name} — ${t.tag}`}
+              className="tm-cover-img"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          ) : (
+            <ImageSlot label={t.placeholder} />
+          )}
+        </div>
+        {t.available && <span className="tm-badge">Available now →</span>}
+      </div>
+      <div className="tm-card-meta">
+        <div className="left">
+          <span className="tm-card-num">{t.num}</span>
+          <span className="tm-card-name">{t.name}</span>
+        </div>
+        <span className="tm-card-tag">{t.tag}</span>
+      </div>
+    </>
+  );
+  const style = { gridColumn: `span ${t.span}`, ...t.style };
+  return t.href ? (
+    <a
+      href={t.href}
+      target="_blank"
+      rel="noreferrer"
+      className="tm-card"
+      style={style}
+    >
+      {inner}
+    </a>
+  ) : (
+    <Link href={`/templates/${t.slug}`} className="tm-card" style={style}>
+      {inner}
+    </Link>
+  );
+}
 
 export default function Landing() {
   const root = useRef<HTMLDivElement>(null);
@@ -218,7 +267,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="tm-hero tm-container">
         <div className="tm-hero-line">
-          <span>Collection 01 — Six websites</span>
+          <span>Two collections — Studio &amp; Hospitality</span>
         </div>
 
         <h1 className="tm-hero-title">
@@ -237,8 +286,8 @@ export default function Landing() {
 
         <div className="tm-hero-foot">
           <p className="tm-fade">
-            Templify is a curated index — not a marketplace. Six website
-            templates a season, each one built like client work: real
+            Templify is a curated index — not a marketplace. Focused
+            collections, each template built like client work: real
             typography, real motion, no dashboard filler.
           </p>
           <a href="#index" className="tm-fade pill">
@@ -308,67 +357,28 @@ export default function Landing() {
             className="eyebrow"
             style={{ color: "var(--muted-dimmer)" }}
           >
-            Eight templates · all live
+            Two collections · eight templates
           </span>
         </div>
 
-        <div className="tm-grid">
-          {templates.map((t) => {
-            const inner = (
-              <>
-                <div className="tm-frame" style={{ aspectRatio: t.aspect }}>
-                  <div className="tm-img">
-                    {t.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={t.image}
-                        alt={`${t.name} — ${t.tag}`}
-                        className="tm-cover-img"
-                        loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
-                      />
-                    ) : (
-                      <ImageSlot label={t.placeholder} />
-                    )}
-                  </div>
-                  {t.available && (
-                    <span className="tm-badge">Available now →</span>
-                  )}
-                </div>
-                <div className="tm-card-meta">
-                  <div className="left">
-                    <span className="tm-card-num">{t.num}</span>
-                    <span className="tm-card-name">{t.name}</span>
-                  </div>
-                  <span className="tm-card-tag">{t.tag}</span>
-                </div>
-              </>
-            );
-            const style = { gridColumn: `span ${t.span}`, ...t.style };
-            return t.href ? (
-              <a
-                key={t.slug}
-                href={t.href}
-                target="_blank"
-                rel="noreferrer"
-                className="tm-card"
-                style={style}
-              >
-                {inner}
-              </a>
-            ) : (
-              <Link
-                key={t.slug}
-                href={`/templates/${t.slug}`}
-                className="tm-card"
-                style={style}
-              >
-                {inner}
-              </Link>
-            );
-          })}
-        </div>
+        {collections.map((col) => (
+          <div className="tm-collection" key={col.num}>
+            <div className="tm-collection-head tm-reveal">
+              <div className="tm-collection-head-left">
+                <span className="eyebrow tm-collection-num">
+                  Collection {col.num}
+                </span>
+                <h3 className="tm-collection-name">{col.name}</h3>
+              </div>
+              <p className="tm-collection-focus">{col.focus}</p>
+            </div>
+            <div className="tm-grid">
+              {collectionTemplates(col).map((t) => (
+                <TemplateCard key={t.slug} t={t} />
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* About */}
@@ -392,9 +402,9 @@ export default function Landing() {
                 in the way.
               </div>
               <div>
-                <h3>Six a season</h3>
-                A new collection four times a year. Nothing added just to fill
-                the shelf.
+                <h3>Collections, with a focus</h3>
+                Each drop is themed — studios one season, hospitality the next.
+                Nothing added just to fill the shelf.
               </div>
             </div>
           </div>
