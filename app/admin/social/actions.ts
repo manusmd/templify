@@ -183,8 +183,16 @@ export async function publishPost(id: string): Promise<void> {
   const cfg = await getBufferConfig();
   const post = await prisma.socialPost.findUnique({ where: { id } });
   if (!cfg.apiKey || !post?.bufferPostId) return;
+  const urls = Array.isArray(post.imageUrls)
+    ? (post.imageUrls as string[])
+    : [post.imageUrl];
   try {
-    await publishPostNow(cfg.apiKey, post.bufferPostId);
+    await publishPostNow(cfg.apiKey, {
+      id: post.bufferPostId,
+      text: post.caption,
+      imageUrls: urls,
+      igType: post.type as "post" | "reel" | "story",
+    });
     await prisma.socialPost.update({
       where: { id },
       data: { status: "sent", error: null },

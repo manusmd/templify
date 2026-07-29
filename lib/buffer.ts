@@ -149,10 +149,17 @@ export async function getPost(
   };
 }
 
-// Publish an already-scheduled post immediately (no dedicated mutation — editPost + shareNow).
+// Publish an already-scheduled post immediately. Buffer has no dedicated
+// "publish now" mutation and editPost is a full replace (not a patch), so we
+// resend the post's content (text + media) with mode: shareNow.
 export async function publishPostNow(
   apiKey: string,
-  postId: string,
+  args: {
+    id: string;
+    text: string;
+    imageUrls: string[];
+    igType?: "post" | "reel" | "story";
+  },
 ): Promise<void> {
   const data = await gql<{
     editPost: { post?: { id: string }; message?: string };
@@ -164,7 +171,18 @@ export async function publishPostNow(
         ... on MutationError { message }
       }
     }`,
-    { input: { id: postId, mode: "shareNow", schedulingType: "automatic" } },
+    {
+      input: {
+        id: args.id,
+        text: args.text,
+        assets: args.imageUrls.map((url) => ({ image: { url } })),
+        metadata: {
+          instagram: { type: args.igType ?? "post", shouldShareToFeed: true },
+        },
+        schedulingType: "automatic",
+        mode: "shareNow",
+      },
+    },
   );
   if (data.editPost?.message) throw new Error(data.editPost.message);
 }
